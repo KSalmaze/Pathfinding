@@ -24,7 +24,6 @@ public class GenTiles : MonoBehaviour
     private void Start()
     {
         colors = gameObject.GetComponent<ColorConsts>();
-        Debug.Log(colors.DESCOBERTO);
     }
 
     public void BotaoGerarTiles()
@@ -69,7 +68,7 @@ public class GenTiles : MonoBehaviour
                 // Coloca esse tile na grade
                 novoTile.transform.SetParent(grade.transform);
 
-                novoTile.GetComponent<Botao>().ChangeColor(colors.DESCOBERTO);
+                novoTile.GetComponent<Botao>().ChangeColor(colors.NAO_DESCOBERTO);
 
                 // Nomeia baseado na sua posição
                 novoTile.name = "Tile X:" + i + " Y:" + j;
