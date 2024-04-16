@@ -10,12 +10,16 @@ public class GenTiles : MonoBehaviour
     [SerializeField] private GameObject tilePrefab;
     [Tooltip("Distancia entre os tiles")]
     [Range(0f,2f)][SerializeField] private float distanciaEntreTiles;
-    [Tooltip("Ponto inicial para a geração de tiles")]
-    [SerializeField] private Transform pontoIncial;
+    [Tooltip("Objeto pai, todos os tiles serão filhos dele")]
+    [SerializeField] private GameObject objetoPai;
 
     void Start()
     {
-        
+        for(int i = 0;i < quantidadeDeTiles_X; i++)
+        {
+            GameObject gameObject = Instantiate(tilePrefab);
+            gameObject.transform.parent = objetoPai.transform;
+        }
     }
 
 
