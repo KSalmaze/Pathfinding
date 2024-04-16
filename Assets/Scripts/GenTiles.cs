@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
-using System.Globalization;
 
 public class GenTiles : MonoBehaviour
 {
@@ -20,10 +19,15 @@ public class GenTiles : MonoBehaviour
     [Tooltip("Objeto pai de todos os tiles, também é o objeto que contém o componente de grade")]
     [SerializeField] private GameObject grade;
 
+    private ColorConsts colors;
 
-    public void ButaoGerarTiles()
+    private void Start()
     {
-        Debug.Log("Apertou o botão");
+        colors = gameObject.GetComponent<ColorConsts>();
+    }
+
+    public void BotaoGerarTiles()
+    {
         if (quantidadeDeTiles_Y == 0 && quantidadeDeTiles_X == 0 &&
             VerificarInputField(qntTiles_Y) && VerificarInputField(qntTiles_X))
         {
@@ -33,13 +37,11 @@ public class GenTiles : MonoBehaviour
         }
     }
 
-    private bool VerificarInputField(TMP_InputField inputField ,int quantidadeMax = 100)
+    private bool VerificarInputField(TMP_InputField inputField ,int quantidadeMax = 20)
     {
-        Debug.Log("Verifcando Input Field");
         string text = inputField.text;
-        if (text != string.Empty && int.Parse(text) <= quantidadeMax)
+        if (text != string.Empty && int.Parse(text) <= quantidadeMax && int.Parse(text) > 0)
         {
-            Debug.Log("Correta");
             return true;
         }
         else
@@ -57,12 +59,17 @@ public class GenTiles : MonoBehaviour
 
     private void CriarTiles()
     {
-        for (int i = 0; i < quantidadeDeTiles_X * quantidadeDeTiles_Y; i++)
+        for (int i = 0; i < quantidadeDeTiles_X; i++)
         {
-            // Cria um tile
-            GameObject gameObject = Instantiate(tilePrefab);
-            // Coloca esse tile na grade
-            gameObject.transform.SetParent(grade.transform);
+            for (int j = 0; j < quantidadeDeTiles_Y; j++)
+            {
+                // Cria um tile
+                GameObject novoTile = Instantiate(tilePrefab);
+                // Coloca esse tile na grade
+                novoTile.transform.SetParent(grade.transform);
+                // Nomeia baseado na sua posição
+                novoTile.name = "Tile X:" + i + " Y:" + j;
+            }
         }
     }
 
