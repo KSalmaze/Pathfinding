@@ -1,7 +1,4 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.UI;
 
 public class Botao : MonoBehaviour
 {
@@ -10,7 +7,7 @@ public class Botao : MonoBehaviour
         Debug.Log("O componente existe");
         if (Input.GetKey(KeyCode.P))
         {
-            //  gameObject.GetComponent<Image>();
+            
         }
         else if (Input.GetKey(KeyCode.E))
         {
@@ -24,6 +21,7 @@ public class Botao : MonoBehaviour
 
     public void ChangeColor(Color newColor)
     {
+        Debug.Log("Trocando a Cor");
         gameObject.GetComponent<UnityEngine.UI.Image>().color = newColor;
     }
 }
