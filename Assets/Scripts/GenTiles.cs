@@ -20,16 +20,6 @@ public class GenTiles : MonoBehaviour
     [Tooltip("Objeto pai de todos os tiles, também é o objeto que contém o componente de grade")]
     [SerializeField] private GameObject grade;
 
-    void Start()
-    {
-        
-    }
-
-
-    void Update()
-    {
-
-    }
 
     public void ButaoGerarTiles()
     {
