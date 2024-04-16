@@ -18,7 +18,7 @@ public class GenTiles : MonoBehaviour
     [Range(0f,2f)][SerializeField] private float distanciaEntreTiles;
     [Tooltip("Objeto pai de todos os tiles, também é o objeto que contém o componente de grade")]
     [SerializeField] private GameObject grade;
-
+    [SerializeField] private Grafo grafo;
     private ColorConsts colors;
 
     private void Start()
@@ -71,6 +71,8 @@ public class GenTiles : MonoBehaviour
                 novoTile.GetComponent<Botao>().ChangeColor(colors.NAO_DESCOBERTO);
                 // Nomeia baseado na sua posição
                 novoTile.name = "Tile X:" + i + " Y:" + j;
+                // Inicializa o nó com a sua posiçaõ correta
+                novoTile.GetComponent<Node>().position = (i,j);
             }
         }
     }
