@@ -67,9 +67,8 @@ public class GenTiles : MonoBehaviour
                 GameObject novoTile = Instantiate(tilePrefab);
                 // Coloca esse tile na grade
                 novoTile.transform.SetParent(grade.transform);
-
+                // Coloca a cor certa
                 novoTile.GetComponent<Botao>().ChangeColor(colors.NAO_DESCOBERTO);
-
                 // Nomeia baseado na sua posição
                 novoTile.name = "Tile X:" + i + " Y:" + j;
             }
