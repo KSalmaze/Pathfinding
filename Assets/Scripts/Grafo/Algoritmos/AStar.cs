@@ -26,7 +26,7 @@ public class AStar : AlgoritmoDeBusca, IComparer<Node>
         {
             nosAbertos.Sort(Compare);
             Node noAtual = nosAbertos[0];
-            Debug.Log("Novo nó : " + noAtual.position);
+            Debug.Log("Novo nó : " + noAtual.position + "Com custo :" + custos[noAtual] + " Heristica :" + grafo.Heuristica(noAtual.position));
 
             if (noAtual.status == colorConsts.DESCOBERTO)
             {
@@ -79,8 +79,8 @@ public class AStar : AlgoritmoDeBusca, IComparer<Node>
 
     public int Compare(Node a, Node b)
     {
-        double custoA = custos[a] + _grafo.Heuristica(a.position);
-        double custoB = custos[b] + _grafo.Heuristica(b.position);
+        double custoA = _grafo.Heuristica(a.position) - custos[a];
+        double custoB = _grafo.Heuristica(b.position) - custos[b];
 
         return custoA.CompareTo(custoB);
     }

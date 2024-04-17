@@ -56,6 +56,7 @@ public class Grafo : MonoBehaviour
 
     public double Heuristica((int x, int y) posicaoDoNo)
     {
+        //Debug.Log("DIstancia de " + posicaoDoNo + " até o Player" + DistanceBetween(posicaoDoNo, PosicaoPlayer));
         return DistanceBetween(posicaoDoNo, PosicaoPlayer);
     }
 
