@@ -27,36 +27,43 @@ public class Grafo : MonoBehaviour
 
     public List<Node> NosVizinhos((int x, int y)posicaoDoNo)
     {
-        Debug.Log("Veriicand Vizinhos para: " + posicaoDoNo);
+        //Debug.Log("Veriicand Vizinhos para: " + posicaoDoNo);
         List<Node> lista = new List<Node>();
 
         if (posicaoDoNo.x - 1 >= 0)
         {
             lista.Add(nos[posicaoDoNo.y][posicaoDoNo.x - 1]);
-            Debug.Log("Vizinho encontrado em " + nos[posicaoDoNo.y][posicaoDoNo.x - 1].position);
+            //Debug.Log("Vizinho encontrado em " + nos[posicaoDoNo.y][posicaoDoNo.x - 1].position);
         }
         if (posicaoDoNo.x + 1 < comprimeto.x)
         {
             lista.Add(nos[posicaoDoNo.y][posicaoDoNo.x + 1]);
-            Debug.Log("Vizinho encontrado em " + nos[posicaoDoNo.y][posicaoDoNo.x + 1].position);
+            //Debug.Log("Vizinho encontrado em " + nos[posicaoDoNo.y][posicaoDoNo.x + 1].position);
         }
         if (posicaoDoNo.y - 1 >= 0)
         {
             lista.Add(nos[posicaoDoNo.y - 1][posicaoDoNo.x]);
-            Debug.Log("Vizinho encontrado em " + nos[posicaoDoNo.y - 1][posicaoDoNo.x].position);
+            //Debug.Log("Vizinho encontrado em " + nos[posicaoDoNo.y - 1][posicaoDoNo.x].position);
         }
         if (posicaoDoNo.y + 1 < comprimeto.y)
         {
             lista.Add(nos[posicaoDoNo.y + 1][posicaoDoNo.x]);
-            Debug.Log("Vizinho encontrado em " + nos[posicaoDoNo.y + 1][posicaoDoNo.x].position);
+            //Debug.Log("Vizinho encontrado em " + nos[posicaoDoNo.y + 1][posicaoDoNo.x].position);
         }
 
         return lista;
     }
 
-    public float Heuristica((int x, int y) posicaoDoNo)
+    public double Heuristica((int x, int y) posicaoDoNo)
     {
-        return 0;
+        return DistanceBetween(posicaoDoNo, PosicaoPlayer);
+    }
+
+    private double DistanceBetween((int x, int y) a, (int x, int y) b)
+    {
+        double deltaX = b.x - a.x;
+        double deltaY = b.y - a.y;
+        return System.Math.Sqrt(deltaX * deltaX + deltaY * deltaY);
     }
 
     public void BuscaEmLargura()
@@ -69,9 +76,24 @@ public class Grafo : MonoBehaviour
         }
     }
 
+    public void AEstrela()
+    {
+        AStar aEstrela = new AStar();
+
+        if (VerificarSePodeComecarABusca())
+        {
+            StartCoroutine(aEstrela.Comecar(this, colorConsts));
+        }
+    }
+
     private bool VerificarSePodeComecarABusca()
     {
-        return true;
+        if (PosicaoPlayer != (-1,-1) && PosicaoInimigo != (-1,-1))
+        {
+            return true;
+        }
+
+        return false;
     }
 
     public Node PosicaoInicial()
@@ -96,5 +118,10 @@ public class Grafo : MonoBehaviour
         }
 
         yield break;
+    }
+
+    private void GerarEstatisticas()
+    {
+
     }
 }
