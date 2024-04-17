@@ -4,13 +4,61 @@ using UnityEngine;
 
 public class BuscaEmLargura : AlgoritmoDeBusca
 {
-    override public IEnumerator Comecar(Grafo grafo)
+    private Grafo _grafo;
+
+    override public IEnumerator Comecar(Grafo grafo, ColorConsts cc)
     {
-        // Aqui fica o algoritmo :)
-        // A cada operação relevante usar o seguinte retorno
-        // yield return null;
-        // Isso vai fazer as alterações aparecerem na tela
-        return null;
+        _grafo = grafo;
+        colorConsts = cc;
+        Dictionary<Node, Node> nosAnteriores = new Dictionary<Node, Node>();
+        Queue<Node> fila = new Queue<Node>();
+        fila.Enqueue(grafo.PosicaoInicial());
+
+        while (fila.Count > 0)
+        {
+            Node noAtual = fila.Dequeue();
+            if (noAtual.status == colorConsts.DESCOBERTO)
+            {
+                noAtual.MudarStatus(colorConsts.VISITADO);
+            }
+
+            foreach (Node no in grafo.NosVizinhos(noAtual.position))
+            {
+                Debug.Log("Descobrindo o nó " + no.position);
+                Color status = no.status;
+
+                if (status == colorConsts.PLAYER)
+                {
+                    Debug.Log("Encontrou o jogador");
+                    nosAnteriores.Add(no, noAtual);
+                    PlayerEncontrado(nosAnteriores, noAtual);
+                    yield break;
+                }
+
+                if (status == colorConsts.NAO_DESCOBERTO)
+                {
+                    nosAnteriores.Add(no, noAtual);
+                    no.MudarStatus(grafo.colorConsts.DESCOBERTO);
+                    fila.Enqueue(no);
+                }
+            }
+            yield return null;
+            yield return null;
+        }
+    }
+
+    private void PlayerEncontrado(Dictionary<Node, Node> nosAnteriores, Node ultimoNo)
+    {
+        List<Node> caminho = new List<Node>();
+        Node noAtual = ultimoNo;
+
+        do
+        {
+            caminho.Add(noAtual);
+            noAtual = nosAnteriores[noAtual];
+        } while (noAtual.position != _grafo.PosicaoInimigo);
+
+        _grafo.MostrarCaminho(caminho);
     }
 }
 /*  Documentação de Nó (Node)

@@ -30,5 +30,6 @@ public class Node : MonoBehaviour
     public void MudarStatus(Color cor)
     {
         image.color = cor;
+        status = cor;
     }
 }

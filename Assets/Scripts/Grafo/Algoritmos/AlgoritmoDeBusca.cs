@@ -4,6 +4,8 @@ using UnityEngine;
 
 abstract public class AlgoritmoDeBusca
 {
-    abstract public IEnumerator Comecar(Grafo grafo);
+    public ColorConsts colorConsts;
+
+    abstract public IEnumerator Comecar(Grafo grafo, ColorConsts cc);
 
 }

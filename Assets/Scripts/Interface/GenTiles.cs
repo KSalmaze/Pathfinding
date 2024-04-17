@@ -52,6 +52,8 @@ public class GenTiles : MonoBehaviour
 
     private void GerarTiles()
     {
+        grafo.InicializarGrafo(quantidadeDeTiles_X,quantidadeDeTiles_Y);
+
         CriarTiles();
 
         AdicionarEspacamentoAosTiles();
@@ -72,7 +74,7 @@ public class GenTiles : MonoBehaviour
                 // Nomeia baseado na sua posição
                 novoTile.name = "Tile X:" + i + " Y:" + j;
                 // Inicializa o nó com a sua posiçaõ correta
-                novoTile.GetComponent<Node>().position = (i,j);
+                novoTile.GetComponent<Node>().InicializarNo((i,j), colors.NAO_DESCOBERTO);
             }
         }
     }

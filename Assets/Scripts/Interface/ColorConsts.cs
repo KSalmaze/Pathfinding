@@ -10,16 +10,5 @@ public class ColorConsts : MonoBehaviour
     [SerializeField] public Color INIMIGO;
     [SerializeField] public Color PLAYER;
     [SerializeField] public Color OBSTACULO;
-
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
+    [SerializeField] public Color CAMINHO;
 }
