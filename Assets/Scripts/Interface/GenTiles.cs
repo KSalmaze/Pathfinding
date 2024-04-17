@@ -90,6 +90,10 @@ public class GenTiles : MonoBehaviour
 
     public void LimparGrade()
     {
+        if (grafo.algumaCoisaEstaAcontecendo)
+        {
+            return;
+        }
         // Itera por todos os filhos do objeto pai
         for (int i = grade.transform.childCount - 1; i >= 0; i--)
         {

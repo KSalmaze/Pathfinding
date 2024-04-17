@@ -1,17 +1,24 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Diagnostics;
+using TMPro;
 using UnityEngine;
 
 public class Grafo : MonoBehaviour
 {
+    [SerializeField] private TMP_Text caixaDeTexto;
     public ColorConsts colorConsts;
     public Node[][] nos;
     public (int x, int y) PosicaoPlayer = (-1,-1);
     public (int x, int y) PosicaoInimigo = (-1,-1);
     private (int x, int y) comprimeto;
+    Stopwatch cronometro;
+    
+    public bool algumaCoisaEstaAcontecendo = false;
     
     public void InicializarGrafo(int tamanho_X, int tamanho_Y)
     {
+        cronometro = new Stopwatch();
         PosicaoPlayer = (-1, -1);
         PosicaoInimigo = (-1, -1);
 
@@ -69,27 +76,31 @@ public class Grafo : MonoBehaviour
 
     public void BuscaEmLargura()
     {
+        cronometro.Start();
         BuscaEmLargura buscaEmLargura = new BuscaEmLargura();
 
         if (VerificarSePodeComecarABusca())
         {
+            algumaCoisaEstaAcontecendo = true;
             StartCoroutine(buscaEmLargura.Comecar(this, colorConsts));
         }
     }
 
     public void AEstrela()
     {
+        cronometro.Start();
         AStar aEstrela = new AStar();
 
         if (VerificarSePodeComecarABusca())
         {
+            algumaCoisaEstaAcontecendo = true;
             StartCoroutine(aEstrela.Comecar(this, colorConsts));
         }
     }
 
     private bool VerificarSePodeComecarABusca()
     {
-        if (PosicaoPlayer != (-1,-1) && PosicaoInimigo != (-1,-1))
+        if (PosicaoPlayer != (-1,-1) && PosicaoInimigo != (-1,-1) && !algumaCoisaEstaAcontecendo)
         {
             return true;
         }
@@ -99,12 +110,12 @@ public class Grafo : MonoBehaviour
 
     public Node PosicaoInicial()
     {
-        Debug.Log(PosicaoInimigo);
         return nos[PosicaoInimigo.y][PosicaoInimigo.x] ;
     }
 
     public void MostrarCaminho(List<Node> caminho)
     {
+        cronometro.Stop();
         StartCoroutine(MostrarCaminhoCoroutine(caminho));
     }
 
@@ -118,11 +129,74 @@ public class Grafo : MonoBehaviour
             yield return null;
         }
 
+        GerarEstatisticas();
         yield break;
     }
 
-    private void GerarEstatisticas()
+    public void Limpar()
     {
+        if (algumaCoisaEstaAcontecendo)
+        {
+            return;
+        }
 
+        cronometro.Stop();
+        caixaDeTexto.text = string.Empty;
+        List<Color> coresParaLimpar = new List<Color>()
+        {
+            colorConsts.CAMINHO,
+            colorConsts.DESCOBERTO,
+            colorConsts.VISITADO
+        };
+
+        for (int i = 0; i < comprimeto.y; i++)
+        {
+            for (int j = 0; j < comprimeto.x; j++)
+            {
+                if (coresParaLimpar.Contains(nos[i][j].status))
+                {
+                    nos[i][j].MudarStatus(colorConsts.NAO_DESCOBERTO);
+                }
+            }
+        }
+    }
+
+    public void GerarEstatisticas()
+    {
+        cronometro.Stop();
+        int nosDescobertos = 0, nosExplorados = 0, custoTotal = 0;
+
+        for (int i = 0; i < comprimeto.y; i++)
+        {
+            for (int j = 0; j < comprimeto.x; j++)
+            {
+                Color status = nos[i][j].status;
+
+                if (status == colorConsts.NAO_DESCOBERTO || status == colorConsts.OBSTACULO)
+                {
+                    continue;
+                }
+                else if (status == colorConsts.DESCOBERTO)
+                {
+                    nosDescobertos++;
+                }
+                else if (status == colorConsts.VISITADO)
+                {
+                    nosExplorados++;
+                    nosDescobertos++;
+                }
+                else if (status == colorConsts.CAMINHO)
+                {
+                    nosExplorados++;
+                    nosDescobertos++;
+                    custoTotal++;
+                }
+            }
+        }
+
+        caixaDeTexto.text = $"Custo Total: {custoTotal} Tempo Total: {cronometro.ElapsedMilliseconds}ms" +
+            $" Nos descobertos: {nosDescobertos} Nos explorados: {nosExplorados}";
+        algumaCoisaEstaAcontecendo = false;
+        cronometro.Reset();
     }
 }

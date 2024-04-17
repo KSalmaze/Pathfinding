@@ -74,6 +74,7 @@ public class AStar : AlgoritmoDeBusca, IComparer<Node>
             yield return null;
         }
 
+        grafo.GerarEstatisticas();
         yield break;
     }
 

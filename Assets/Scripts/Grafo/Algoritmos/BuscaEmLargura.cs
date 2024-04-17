@@ -45,6 +45,8 @@ public class BuscaEmLargura : AlgoritmoDeBusca
             yield return null;
             yield return null;
         }
+
+        grafo.GerarEstatisticas();
     }
 
     private void PlayerEncontrado(Dictionary<Node, Node> nosAnteriores, Node ultimoNo)
