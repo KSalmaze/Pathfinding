@@ -41,8 +41,8 @@ public class BuscaEmLargura : AlgoritmoDeBusca
                     no.MudarStatus(grafo.colorConsts.DESCOBERTO);
                     fila.Enqueue(no);
                 }
+                yield return null;
             }
-            yield return null;
             yield return null;
         }
 

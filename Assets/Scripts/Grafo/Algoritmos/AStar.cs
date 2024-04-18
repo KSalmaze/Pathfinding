@@ -38,7 +38,6 @@ public class AStar : AlgoritmoDeBusca, IComparer<Node>
 
             foreach(Node no in grafo.NosVizinhos(noAtual.position))
             {
-                Debug.Log("Descobrindo o nó " + no.position);
                 Color status = no.status;
 
                 if (status == colorConsts.NAO_DESCOBERTO)
@@ -65,12 +64,14 @@ public class AStar : AlgoritmoDeBusca, IComparer<Node>
 
                     if (!nosAbertos.Contains(no))
                     {
+                        Debug.Log("Inserindo na lista: " + no.position + "Com custo : "
+                           + (_grafo.Heuristica(no.position) - custos[no]));
                         nosAbertos.Add(no);
                     }
                 }
+                yield return null;
             }
 
-            yield return null;
             yield return null;
         }
 
@@ -80,8 +81,8 @@ public class AStar : AlgoritmoDeBusca, IComparer<Node>
 
     public int Compare(Node a, Node b)
     {
-        double custoA = _grafo.Heuristica(a.position) - custos[a];
-        double custoB = _grafo.Heuristica(b.position) - custos[b];
+        double custoA = _grafo.Heuristica(a.position) + custos[a];
+        double custoB = _grafo.Heuristica(b.position) + custos[b];
 
         return custoA.CompareTo(custoB);
     }

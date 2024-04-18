@@ -24,6 +24,10 @@ public class Botao : MonoBehaviour
             ChangeColor(colorConsts.PLAYER);
             grafo.PosicaoPlayer = no.position;
         }
+        else if (Input.GetKey(KeyCode.D))
+        {
+            Debug.Log("Posição: " + no.position +" Heuristica: " + grafo.Heuristica(no.position));
+        }
         else if (Input.GetKey(KeyCode.E))
         {
             if (grafo.PosicaoInimigo != (-1,-1)) 
