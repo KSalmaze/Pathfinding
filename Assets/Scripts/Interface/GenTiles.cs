@@ -4,28 +4,36 @@ using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
 
+/*
+ A classe herda de MonoBehaviour, o que torna essa classe um componente, 
+que nesse caso é acoplado no GameManager, objeto responsável por gerenciar
+as "regras" do jogo.
+ */
 public class GenTiles : MonoBehaviour
 {
-    [SerializeField] private TMP_InputField qntTiles_X;
-    [SerializeField] private TMP_InputField qntTiles_Y;
-    private int quantidadeDeTiles_X;
-    private int quantidadeDeTiles_Y;
-    [SerializeField] private int maxTiles_X;
-    [SerializeField] private int maxTiles_Y;
+    [SerializeField] private TMP_InputField qntTiles_X;// Input fild para quantidade de tiles no eixo X
+    [SerializeField] private TMP_InputField qntTiles_Y;// Input fild para quantidade de tiles no eixo Y
+    private int quantidadeDeTiles_X; // Armazena a quantidade de tiles no eixo x
+    private int quantidadeDeTiles_Y; // Armazena a quantidade de tiles no eixo y
+    [SerializeField] private int maxTiles_X; // Define a máximo de tiles no eixo x
+    [SerializeField] private int maxTiles_Y; // Define a máximo de tiles no eixo y
     [Tooltip("Prefab de Tile")]
-    [SerializeField] private GameObject tilePrefab;
+    [SerializeField] private GameObject tilePrefab; // Tile a ser replicado
     [Tooltip("Distancia entre os tiles")]
-    [Range(0f,2f)][SerializeField] private float distanciaEntreTiles;
+    [Range(0f,2f)][SerializeField] private float distanciaEntreTiles; // Dintancia entre os tiles
     [Tooltip("Objeto pai de todos os tiles, também é o objeto que contém o componente de grade")]
-    [SerializeField] private GameObject grade;
-    [SerializeField] private Grafo grafo;
-    private ColorConsts colors;
+    [SerializeField] private GameObject grade; // Grade onde os tiles ficam
+    [SerializeField] private Grafo grafo; // Referencia ao grafo
+    private ColorConsts colors; // Cores que indicam o status dos nós
 
+
+    // Função da Unity, chamada antes do jogo iniciar
     private void Start()
     {
         colors = gameObject.GetComponent<ColorConsts>();
     }
 
+    // Função acoplada ao botão de gerar tiles
     public void BotaoGerarTiles()
     {
         if (quantidadeDeTiles_Y == 0 && quantidadeDeTiles_X == 0 &&
@@ -37,6 +45,7 @@ public class GenTiles : MonoBehaviour
         }
     }
 
+    // Função que verificar se os dados nos Inputfields são válidos
     private bool VerificarInputField(TMP_InputField inputField ,int quantidadeMax = 20)
     {
         string text = inputField.text;
