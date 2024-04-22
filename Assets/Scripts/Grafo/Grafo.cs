@@ -1,80 +1,83 @@
 using System.Collections;
 using System.Collections.Generic;
-using System.Diagnostics;
-using TMPro;
+using System.Diagnostics; // Utilizado para cronometrar eventos, como a duração da busca.
+using TMPro; // Text Mesh Pro para exibição de texto na interface do usuário.
 using UnityEngine;
 
+// Classe principal que representa o grafo sobre o qual os algoritmos de busca irão operar.
 public class Grafo : MonoBehaviour
 {
-    [SerializeField] private TMP_Text caixaDeTexto;
-    public ColorConsts colorConsts;
-    public Node[][] nos;
-    public (int x, int y) PosicaoPlayer = (-1,-1);
-    public (int x, int y) PosicaoInimigo = (-1,-1);
-    private (int x, int y) comprimeto;
-    Stopwatch cronometro;
-    
-    public bool algumaCoisaEstaAcontecendo = false;
-    
+    [SerializeField] private TMP_Text caixaDeTexto;// Referência ao texto na UI onde as estatísticas serão exibidas.
+    public ColorConsts colorConsts;// Instância que armazena as cores utilizadas para diferenciar estados dos nós.
+    public Node[][] nos;// Matriz bidimensional de nós que compõem o grafo.
+    public (int x, int y) PosicaoPlayer = (-1,-1); // Posição inicial do jogador no grafo.
+    public (int x, int y) PosicaoInimigo = (-1,-1); // Posição inicial do inimigo no grafo.
+    private (int x, int y) comprimeto; // Tamanho do grafo (largura e altura).
+    Stopwatch cronometro; // Cronômetro para medir o tempo de execução dos algoritmos.
+
+    public bool algumaCoisaEstaAcontecendo = false; // Flag para verificar se uma busca já está em progresso.
+
+    // Método para inicializar o grafo com um determinado tamanho.
     public void InicializarGrafo(int tamanho_X, int tamanho_Y)
     {
-        cronometro = new Stopwatch();
-        PosicaoPlayer = (-1, -1);
-        PosicaoInimigo = (-1, -1);
+        cronometro = new Stopwatch(); // Inicializa o cronômetro.
+        PosicaoPlayer = (-1, -1); // Reseta a posição do jogador.
+        PosicaoInimigo = (-1, -1); // Reseta a posição do inimigo.
 
-        comprimeto = (tamanho_X,tamanho_Y);
+        comprimeto = (tamanho_X,tamanho_Y); // Define o tamanho do grafo.
 
+        // Cria a matriz de nós com base no tamanho fornecido.
         nos = new Node[tamanho_Y][];
-
         for (int i = 0; i < tamanho_Y; i++)
         {
             nos[i] = new Node[tamanho_X];
         }
     }
 
+    // Método para obter a lista de nós vizinhos de um nó específico.
     public List<Node> NosVizinhos((int x, int y)posicaoDoNo)
     {
-        //Debug.Log("Veriicand Vizinhos para: " + posicaoDoNo);
+        // Lista para armazenar os vizinhos.
         List<Node> lista = new List<Node>();
 
+        // Verifica e adiciona vizinhos válidos à lista (cima, baixo, esquerda, direita).
         if (posicaoDoNo.x - 1 >= 0)
         {
             lista.Add(nos[posicaoDoNo.y][posicaoDoNo.x - 1]);
-            //Debug.Log("Vizinho encontrado em " + nos[posicaoDoNo.y][posicaoDoNo.x - 1].position);
         }
         if (posicaoDoNo.x + 1 < comprimeto.x)
         {
             lista.Add(nos[posicaoDoNo.y][posicaoDoNo.x + 1]);
-            //Debug.Log("Vizinho encontrado em " + nos[posicaoDoNo.y][posicaoDoNo.x + 1].position);
         }
         if (posicaoDoNo.y - 1 >= 0)
         {
             lista.Add(nos[posicaoDoNo.y - 1][posicaoDoNo.x]);
-            //Debug.Log("Vizinho encontrado em " + nos[posicaoDoNo.y - 1][posicaoDoNo.x].position);
         }
         if (posicaoDoNo.y + 1 < comprimeto.y)
         {
             lista.Add(nos[posicaoDoNo.y + 1][posicaoDoNo.x]);
-            //Debug.Log("Vizinho encontrado em " + nos[posicaoDoNo.y + 1][posicaoDoNo.x].position);
         }
 
-        return lista;
+        return lista; // Retorna a lista de vizinhos.
     }
 
+    // Método para calcular a heurística (distância Euclidiana) entre dois nós.
     public double Heuristica((int x, int y) posicaoDoNo)
     {
-
-        //Debug.Log("DIstancia de " + posicaoDoNo + " até o Player" + DistanceBetween(posicaoDoNo, PosicaoPlayer));
+        // Retorna o valor absoluto da distância.
         return System.Math.Abs(DistanceBetween(posicaoDoNo, PosicaoPlayer));
     }
 
+    // Método auxiliar para calcular a distância Euclidiana entre dois pontos.
     private double DistanceBetween((int x, int y) a, (int x, int y) b)
     {
         double deltaX = b.x - a.x;
         double deltaY = b.y - a.y;
+        // Retorna a raiz quadrada da soma dos quadrados das diferenças.
         return System.Math.Sqrt(deltaX * deltaX + deltaY * deltaY);
     }
 
+    // Métodos para iniciar as buscas em largura e A*.
     public void BuscaEmLargura()
     {
         cronometro.Start();
@@ -99,6 +102,7 @@ public class Grafo : MonoBehaviour
         }
     }
 
+    // Método para verificar se é possível começar uma busca.
     private bool VerificarSePodeComecarABusca()
     {
         if (PosicaoPlayer != (-1,-1) && PosicaoInimigo != (-1,-1) && !algumaCoisaEstaAcontecendo)
@@ -109,17 +113,20 @@ public class Grafo : MonoBehaviour
         return false;
     }
 
+    // Método para obter a posição inicial do grafo (normalmente a posição do inimigo).
     public Node PosicaoInicial()
     {
         return nos[PosicaoInimigo.y][PosicaoInimigo.x] ;
     }
 
+    // Método para mostrar o caminho encontrado no grafo.
     public void MostrarCaminho(List<Node> caminho)
     {
         cronometro.Stop();
         StartCoroutine(MostrarCaminhoCoroutine(caminho));
     }
 
+    // Coroutine para mostrar o caminho.
     private IEnumerator MostrarCaminhoCoroutine(List<Node> caminho)
     {
         caminho.Reverse();
@@ -134,6 +141,7 @@ public class Grafo : MonoBehaviour
         yield break;
     }
 
+    // Limpa o grafo, mantendo os obstáculos, o player e o inimigo.
     public void Limpar()
     {
         if (algumaCoisaEstaAcontecendo)
@@ -162,6 +170,7 @@ public class Grafo : MonoBehaviour
         }
     }
 
+    // Calcula a quantidade de nós descobertos, explorados e custo total.
     public void GerarEstatisticas()
     {
         cronometro.Stop();
