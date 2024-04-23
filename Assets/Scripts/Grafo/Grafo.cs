@@ -62,11 +62,18 @@ public class Grafo : MonoBehaviour
         return lista; // Retorna a lista de vizinhos.
     }
 
-    // Método para calcular a heurística (distância Euclidiana) entre dois nós.
+    // Método para calcular a heurística (distância Manhattan) entre dois nós.
     public double Heuristica((int x, int y) posicaoDoNo)
     {
-        // Retorna o valor absoluto da distância.
-        return System.Math.Abs(DistanceBetween(posicaoDoNo, PosicaoPlayer));
+        return Manhattan(posicaoDoNo);
+    }
+
+    private int Manhattan((int x, int y) posicaoDoNo)
+    {
+        int x = Mathf.Abs(posicaoDoNo.x - PosicaoPlayer.x);
+        int y = Mathf.Abs(posicaoDoNo.y - PosicaoPlayer.y);
+
+        return x + y;
     }
 
     // Método auxiliar para calcular a distância Euclidiana entre dois pontos.
