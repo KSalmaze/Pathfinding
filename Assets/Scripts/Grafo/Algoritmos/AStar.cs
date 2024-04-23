@@ -116,6 +116,14 @@ public class AStar : AlgoritmoDeBusca, IComparer<Node>
     // Método privado para tratar o encontro com o jogador.
     private void PlayerEncontrado(Dictionary<Node, Node> nosAnteriores, Node ultimoNo)
     {
+        // Caso Player esteja do lado do Inimigo
+        if (ultimoNo == _grafo.PosicaoInicial())
+        {
+            Debug.Log("Problema detectado");
+            _grafo.MostrarCaminho(null);
+            return;
+        }
+
         // Lista para armazenar o caminho encontrado.
         List<Node> caminho = new List<Node>();
         // Começa pelo último nó (onde o jogador foi encontrado).

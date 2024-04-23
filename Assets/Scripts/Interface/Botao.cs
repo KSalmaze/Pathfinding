@@ -21,6 +21,8 @@ public class Botao : MonoBehaviour
         {
             if (grafo.PosicaoPlayer != (-1, -1))
                 return;
+            if (no.position == grafo.PosicaoInimigo)
+                grafo.PosicaoInimigo = (-1,-1);
             ChangeColor(colorConsts.PLAYER);
             grafo.PosicaoPlayer = no.position;
         }
@@ -32,7 +34,8 @@ public class Botao : MonoBehaviour
         {
             if (grafo.PosicaoInimigo != (-1,-1)) 
                 return;
-            
+            if (no.position == grafo.PosicaoPlayer)
+                grafo.PosicaoInimigo = (-1, -1);
             ChangeColor(colorConsts.INIMIGO);
             grafo.PosicaoInimigo = no.position;
         }

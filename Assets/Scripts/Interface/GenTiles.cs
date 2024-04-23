@@ -59,10 +59,14 @@ public class GenTiles : MonoBehaviour
         }
     }
 
+
+    // Função responsável por gerar a malha de quadrados em si
     private void GerarTiles()
     {
+        // Inicializa o grafo
         grafo.InicializarGrafo(quantidadeDeTiles_X,quantidadeDeTiles_Y);
 
+        // Cria os tiles
         CriarTiles();
 
         AdicionarEspacamentoAosTiles();

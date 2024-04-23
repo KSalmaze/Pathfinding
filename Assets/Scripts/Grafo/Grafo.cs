@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Diagnostics; // Utilizado para cronometrar eventos, como a duração da busca.
 using TMPro; // Text Mesh Pro para exibição de texto na interface do usuário.
+using Unity.VisualScripting;
 using UnityEngine;
 
 // Classe principal que representa o grafo sobre o qual os algoritmos de busca irão operar.
@@ -123,7 +124,15 @@ public class Grafo : MonoBehaviour
     public void MostrarCaminho(List<Node> caminho)
     {
         cronometro.Stop();
-        StartCoroutine(MostrarCaminhoCoroutine(caminho));
+
+        if (caminho != null)
+        {
+            StartCoroutine(MostrarCaminhoCoroutine(caminho));
+        }
+        else
+        {
+            GerarEstatisticas();
+        }
     }
 
     // Coroutine para mostrar o caminho.
